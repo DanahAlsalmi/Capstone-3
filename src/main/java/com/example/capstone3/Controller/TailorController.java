@@ -1,11 +1,14 @@
 package com.example.capstone3.Controller;
 
+import com.example.capstone3.Model.Rating;
 import com.example.capstone3.Model.Tailor;
 import com.example.capstone3.Service.TailorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/tailor")
@@ -38,5 +41,20 @@ public class TailorController {
     public ResponseEntity deleteTailor(@PathVariable Integer id) {
         tailorService.deleteTailor(id);
         return ResponseEntity.status(200).body("Tailor successfully deleted");
+    }
+
+
+    //Average for Tailor
+    @GetMapping("/average-rating/{id}")
+    public ResponseEntity getTailorAverage(@PathVariable Integer id) {
+        Double averageRating = tailorService.getAverageRatingForTailor(id);
+        return ResponseEntity.status(200).body("The average is : "+averageRating);
+    }
+
+//    //List of Ratings
+    @GetMapping("/tailor-ratings/{tailorId}")
+    public ResponseEntity getRatingsForTailor(@PathVariable Integer tailorId) {
+        List<Rating> ratings = tailorService.getRatingsForTailor(tailorId);
+        return ResponseEntity.status(200).body(ratings);
     }
 }

@@ -45,8 +45,7 @@ public class Tailor {
     private boolean acceptOrder;
 
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "tailors")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "tailor")
     private Set<Rating> ratings;
-
 }
 

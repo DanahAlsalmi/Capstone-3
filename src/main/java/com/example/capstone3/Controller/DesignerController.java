@@ -1,11 +1,14 @@
 package com.example.capstone3.Controller;
 
 import com.example.capstone3.Model.Designer;
+import com.example.capstone3.Model.Rating;
 import com.example.capstone3.Service.DesignerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/designer")
@@ -39,5 +42,19 @@ public class DesignerController {
     public ResponseEntity deleteDesigner(@PathVariable Integer id) {
         designerService.deleteDesigner(id);
         return ResponseEntity.status(200).body("Designer deleted successfully");
+    }
+
+    //Average for Designer
+    @GetMapping("/average-rating/{id}")
+    public ResponseEntity getDesignerAverage(@PathVariable Integer id) {
+        Double averageRating = designerService.getAverageRatingForDesigner(id);
+        return ResponseEntity.status(200).body("The average is : "+averageRating);
+    }
+
+    //List of Ratings
+    @GetMapping("/designer-ratings/{designerId}")
+    public ResponseEntity getRatingsForDesigner(@PathVariable Integer designerId) {
+        List<Rating> ratings = designerService.getRatingsForDesigner(designerId);
+        return ResponseEntity.status(200).body(ratings);
     }
 }

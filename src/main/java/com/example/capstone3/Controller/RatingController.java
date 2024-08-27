@@ -40,4 +40,26 @@ public class RatingController {
         ratingService.deleteRating(id);
         return ResponseEntity.status(200).body("Rating deleted successfully");
     }
+
+
+    // Endpoint to rate a merchant
+    @PostMapping("/merchant/{merchantId}/rate")
+    public ResponseEntity rateMerchants(@PathVariable Integer merchantId,@Valid @RequestBody Rating rating) {
+        ratingService.rateMerchant(merchantId, rating);
+        return ResponseEntity.status(200).body("Rating Added successfully");
+    }
+
+    // Endpoint to rate a tailor
+    @PostMapping("/tailor/{tailorId}/rate")
+    public ResponseEntity rateTailors(@PathVariable Integer tailorId,@Valid @RequestBody Rating rating) {
+        ratingService.rateTailor(tailorId, rating);
+        return ResponseEntity.status(200).body("Rating Added successfully");
+    }
+
+    // Endpoint to rate a Designer
+    @PostMapping("/designer/{designerId}/rate")
+    public ResponseEntity rateDesigners(@PathVariable Integer designerId,@Valid @RequestBody Rating rating) {
+        ratingService.rateDesigner(designerId, rating);
+        return ResponseEntity.status(200).body("Rating Added successfully");
+    }
 }

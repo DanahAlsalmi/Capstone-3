@@ -1,8 +1,14 @@
 package com.example.capstone3.Service;
 
 import com.example.capstone3.Api.ApiException;
+import com.example.capstone3.Model.Designer;
+import com.example.capstone3.Model.Merchant;
 import com.example.capstone3.Model.Rating;
+import com.example.capstone3.Model.Tailor;
+import com.example.capstone3.Repository.DesignerRepository;
+import com.example.capstone3.Repository.MerchantRepository;
 import com.example.capstone3.Repository.RatingRepository;
+import com.example.capstone3.Repository.TailorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +19,13 @@ import java.util.List;
 public class RatingService {
 
     private final RatingRepository ratingRepository;
+
+    private final MerchantRepository merchantRepository;
+
+    private final TailorRepository tailorRepository;
+
+    private final DesignerRepository designerRepository;
+
 
     //Get Ratings
     public List<Rating> getAllRatings() {
@@ -43,4 +56,60 @@ public class RatingService {
         }
         ratingRepository.delete(r);
     }
+
+    // Save a new rating for a merchant
+    public Rating rateMerchant(Integer merchantId,Rating rating) {
+        Merchant merchant = merchantRepository.findMerchantById(merchantId);
+        if(merchant == null) {
+            throw new ApiException("Merchant with id '" + merchantId + "' not found");
+        }
+        Rating r = new Rating();
+        r.setMerchant(merchant);
+        if(rating.getValue()>5){
+            throw new ApiException("Rating value must be from 1-5 ");
+        }else{
+            r.setValue(rating.getValue());
+        }
+        r.setReview(rating.getReview());
+        merchant.getRatings().add(r);
+        return ratingRepository.save(r);
+    }
+
+    // Save a new rating for a Tailor
+    public Rating rateTailor(Integer tailorId,Rating rating) {
+        Tailor tailor = tailorRepository.findTailorById(tailorId);
+        if(tailor == null) {
+            throw new ApiException("Tailor with id '" + tailorId + "' not found");
+        }
+        Rating r = new Rating();
+        r.setTailor(tailor);
+        if(rating.getValue()>5){
+            throw new ApiException("Rating value must be from 1-5 ");
+        }else{
+            r.setValue(rating.getValue());
+        }
+        r.setReview(rating.getReview());
+        tailor.getRatings().add(r);
+        return ratingRepository.save(r);
+    }
+
+    // Save a new rating for a Tailor
+    public Rating rateDesigner(Integer designerId,Rating rating) {
+        Designer designer = designerRepository.findDesignerById(designerId);
+        if(designer == null) {
+            throw new ApiException("Designer with id '" + designerId + "' not found");
+        }
+        Rating r = new Rating();
+        r.setDesigner(designer);
+        if(rating.getValue()>5){
+            throw new ApiException("Rating value must be from 1-5 ");
+        }else{
+            r.setValue(rating.getValue());
+        }
+
+        r.setReview(rating.getReview());
+        designer.getRatings().add(r);
+        return ratingRepository.save(r);
+    }
+
 }

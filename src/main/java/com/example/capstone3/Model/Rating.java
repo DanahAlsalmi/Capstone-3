@@ -36,5 +36,9 @@ public class Rating {
 
     @ManyToOne
     @JsonIgnore
-    private Tailor tailors;
+    private Tailor tailor;
+
+    @ManyToOne
+    @JsonIgnore
+    private Merchant merchant;
 }
