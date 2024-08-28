@@ -91,4 +91,9 @@ public class MerchantController {
         return ResponseEntity.status(200).body(ratings);
     }
 
+    @GetMapping("/total/{merchantId}")
+    public ResponseEntity getTotalRevenue(@PathVariable Integer merchantId) {
+        return ResponseEntity.ok(merchantService.totalRevenue(merchantId));
+    }
+
 }

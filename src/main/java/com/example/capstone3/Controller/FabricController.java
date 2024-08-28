@@ -87,6 +87,11 @@ public class FabricController {
         return ResponseEntity.ok("Merchant assigned");
     }
 
+    @GetMapping("/top/color")
+    public ResponseEntity getTopColor() {
+        return ResponseEntity.status(200).body(fabricService.topSellColor());
+    }
+
     //***** Done By Danah *****
     @GetMapping("/order-history/{fabricId}")
     public ResponseEntity getFabricOrderHistory(@PathVariable Integer fabricId) {

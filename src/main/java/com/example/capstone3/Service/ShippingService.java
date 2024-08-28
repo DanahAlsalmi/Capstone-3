@@ -31,6 +31,17 @@ public class ShippingService {
         shippingRepository.save(shipping);
     }
 
+    public void updateShipping(ShippingDTO shippingDTO) {
+        Shipping shipping = shippingRepository.findShippingById(shippingDTO.getOrderId());
+        if (shipping == null) {
+            throw new ApiException("Shipping not found");
+        }
+        shipping.setStatus(shippingDTO.getStatus());
+        shipping.setShipperName(shippingDTO.getShipperName());
+        shipping.setPrice(shippingDTO.getPrice());
+        shippingRepository.save(shipping);
+    }
+
     public void deleteShipping(Integer id){
         Shipping shipping = shippingRepository.findShippingById(id);
         if(shipping == null){
@@ -98,6 +109,25 @@ public class ShippingService {
                 throw new ApiException("Invalid order status for updating shipping");
         }
 
+        shippingRepository.save(shipping);
+    }
+
+    public void deliverOrder(Integer shippingId) {
+        Order order = orderRepository.findOrderById(shippingId);
+        if (order == null) {
+            throw new ApiException("Order not found");
+        }
+        Shipping shipping = order.getShipping();
+        order.setOrderStatus("Delivered");
+        orderRepository.save(order);
+    }
+
+    public void assignShipper(Integer shippingId,String shipperName) {
+        Shipping shipping = shippingRepository.findShippingById(shippingId);
+        if (shipping == null){
+            throw new ApiException("Shipping not found");
+        }
+        shipping.setShipperName(shipperName);
         shippingRepository.save(shipping);
     }
 }

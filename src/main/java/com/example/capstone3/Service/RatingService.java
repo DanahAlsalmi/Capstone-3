@@ -19,11 +19,8 @@ import java.util.List;
 public class RatingService {
 
     private final RatingRepository ratingRepository;
-
     private final MerchantRepository merchantRepository;
-
     private final TailorRepository tailorRepository;
-
     private final DesignerRepository designerRepository;
 
     //*****  Done by Danah *****

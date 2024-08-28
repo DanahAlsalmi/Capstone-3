@@ -51,6 +51,11 @@ public class CustomerController {
         return ResponseEntity.status(200).body(new ApiResponse("Order made successfully"));
     }
 
+    @GetMapping("/total/{customerId}")
+    public ResponseEntity totalSpending(@PathVariable Integer customerId) {
+        return ResponseEntity.status(200).body(customerService.totalSpend(customerId));
+    }
+
     //***** Done By Danah *****
     @GetMapping("/orders/history/{customerId}")
     public ResponseEntity getOrderHistory(@PathVariable Integer customerId) {

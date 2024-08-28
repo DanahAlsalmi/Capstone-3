@@ -116,6 +116,7 @@ public class FabricService {
                 .map(Map.Entry::getKey)  // Get the color
                 .orElseThrow(() -> new ApiException("No fabrics found in orders"));
     }
+
     //**** Done by danah ****
     public List<FabricInfoDTO> getFabricOrderHistory(Integer fabricId) {
         Fabric fabric = fabricRepository.findFabricById(fabricId);

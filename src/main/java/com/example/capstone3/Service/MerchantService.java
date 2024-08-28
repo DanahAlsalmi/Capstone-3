@@ -128,4 +128,17 @@ public class MerchantService {
     public Merchant getMerchantById(Integer id) {
         return merchantRepository.findMerchantById(id);
     }
+
+    public double totalRevenue(Integer merchantId) {
+        Merchant merchant = merchantRepository.findMerchantById(merchantId);
+        if (merchant == null) {
+            throw new ApiException("Merchant not found");
+        }
+        List<Order> orders = orderRepository.findOrderByMerchant(merchant);
+        double totalRevenue = 0;
+        for (Order order : orders) {
+            totalRevenue = totalRevenue+order.getFabric().getPrice();
+        }
+        return totalRevenue;
+    }
 }

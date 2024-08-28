@@ -129,6 +129,7 @@ public class DesignerService {
 //        Designer designer = designerRepository.findDesignerById(designerId);
 //        return ratingRepository.findRatingByDesigner(designer);
 //    }
+    //***** Done by Danah *****
     public List<Rating> getRatingsForDesigner(Integer designerId) {
         Designer designer = designerRepository.findDesignerById(designerId);
 
@@ -158,6 +159,7 @@ public class DesignerService {
         return designerInfoList;
     }
 
+    //***** Done by Danah *****
     public String getTopDesignerName() {
         List<Designer> designers = designerRepository.findAll();
 

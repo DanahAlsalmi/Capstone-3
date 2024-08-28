@@ -93,5 +93,10 @@ public class TailorController {
         String topTailor = tailorService.getTopTailorName();
         return ResponseEntity.status(200).body(topTailor);
     }
+    @PutMapping("/finish/{orderId}/{tailorId}")
+    public ResponseEntity finishOrder(@PathVariable Integer orderId, @PathVariable Integer tailorId) {
+        tailorService.finish(orderId, tailorId);
+        return ResponseEntity.status(200).body("Order finished successfully");
+    }
 
 }

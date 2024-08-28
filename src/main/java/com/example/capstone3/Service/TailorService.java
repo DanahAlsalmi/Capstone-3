@@ -43,6 +43,8 @@ public class TailorService {
         t.setPhone(tailor.getPhone());
         t.setAcceptOrder(tailor.isAcceptOrder());
         t.setPriceByMeter(tailor.getPriceByMeter());
+        t.setCity(tailor.getCity());
+        t.setStreet(tailor.getStreet());
         tailorRepository.save(t);
     }
 
@@ -97,6 +99,9 @@ public class TailorService {
     //Get Average Rating
     public Double getAverageRatingForTailor(Integer tailorId) {
         Tailor tailor = tailorRepository.findTailorById(tailorId);
+        if (tailor==null){
+            throw new ApiException("Tailor with id '" + tailorId + "' not found");
+        }
         Set<Rating> ratings = tailor.getRatings();
 
         if (ratings.isEmpty()) {
@@ -115,6 +120,9 @@ public class TailorService {
     //All Ratings
     public List<Rating> getRatingsForTailor(Integer tailorId) {
         Tailor tailor = tailorRepository.findTailorById(tailorId);
+        if (tailor==null){
+            throw new ApiException("Tailor with id '" + tailorId + "' not found");
+        }
         return ratingRepository.findRatingByTailor(tailor);
     }
 
@@ -137,6 +145,9 @@ public class TailorService {
             );
             tailorInfoList.add(tailorInfo);
         }
+        if (tailorInfoList.isEmpty()) {
+            throw new ApiException("there are no orders tailors with the id " + tailorId);
+        }
 
         return tailorInfoList;
     }
@@ -154,6 +165,7 @@ public class TailorService {
         return total;
     }
 
+    //***** Done by Danah *****
     public String getTopTailorName() {
         List<Tailor> tailors = tailorRepository.findAll();
 
@@ -179,6 +191,25 @@ public class TailorService {
         }
 
         return topTailor + " with average rating: " + highestAverageRating;
+    }
+
+    public void finish(Integer orderId,Integer tailorId){
+        Order o = orderRepository.findOrderById(orderId);
+        if (o==null){
+            throw new ApiException("Order not found");
+        }
+        Tailor tailor = tailorRepository.findTailorById(tailorId);
+        if(tailor==null) {
+            throw new ApiException("Tailor not found");
+        }
+        if (!o.getTailor().getId().equals(tailorId)){
+            throw new ApiException("Tailor with id '" + tailorId + "' does not belong to this order");
+        }
+        if (!o.getOrderStatus().equals("Confirmed")){
+            throw new ApiException("Order status is not Confirmed");
+        }
+        o.setOrderStatus("Shipped");
+        orderRepository.save(o);
     }
 
 

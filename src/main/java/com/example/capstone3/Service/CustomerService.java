@@ -120,7 +120,6 @@ public class CustomerService {
         return total;
     }
 
-
     //***** Done By Danah *****
     public List<OrderHistoryDTO> getOrderHistory(Integer customerId) {
         List<Order> orders = orderRepository.findOrderByCustomId(customerId);
