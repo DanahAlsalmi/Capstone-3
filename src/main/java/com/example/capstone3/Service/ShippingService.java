@@ -9,6 +9,7 @@ import com.example.capstone3.Repository.ShippingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -36,5 +37,67 @@ public class ShippingService {
             throw new ApiException("Shipping not found");
         }
         shippingRepository.delete(shipping);
+    }
+
+    public List<Shipping> getShippingsByStatus(String status) {
+        return shippingRepository.findShippingByStatus(status);
+    }
+
+    public void returnShipping(Integer shippingId) {
+        Shipping shipping = shippingRepository.findShippingById(shippingId);
+        if (shipping == null) {
+            throw new ApiException("Shipping not found");
+        }
+
+        if ("Delivered".equalsIgnoreCase(shipping.getStatus())) {
+            throw new ApiException("Cannot return a delivered shipment");
+        }
+
+        shipping.setStatus("Returned");
+        shippingRepository.save(shipping);
+    }
+
+    public LocalDateTime calculateEstimatedDeliveryDate(Integer shippingId) {
+        Shipping shipping = shippingRepository.findShippingById(shippingId);
+        if (shipping == null) {
+            throw new ApiException("Shipping not found");
+        }
+
+        if ("Shipped".equalsIgnoreCase(shipping.getStatus())) {
+            return shipping.getOrder().getOrderDate().plusDays(5);
+        } else if ("Out of Delivery".equalsIgnoreCase(shipping.getStatus())) {
+            return shipping.getOrder().getOrderDate().plusDays(2);
+        } else {
+            throw new ApiException("Cannot calculate delivery date for the current shipping status");
+        }
+    }
+
+    public void updateShippingStatusBasedOnOrderStatus(Integer orderId) {
+        Order order = orderRepository.findOrderById(orderId);
+        if (order == null) {
+            throw new ApiException("Order not found");
+        }
+        Shipping shipping = order.getShipping();
+
+        switch (order.getOrderStatus()) {
+            case "Pending":
+                shipping.setStatus("initialled");
+                break;
+            case "Shipped":
+                shipping.setStatus("Shipped");
+                break;
+            case "Delivered":
+                shipping.setStatus("Delivered");
+                break;
+            case "Reject By Merchant":
+            case "Reject By Tailor":
+            case "Reject By Designer":
+                shipping.setStatus("Returned");
+                break;
+            default:
+                throw new ApiException("Invalid order status for updating shipping");
+        }
+
+        shippingRepository.save(shipping);
     }
 }

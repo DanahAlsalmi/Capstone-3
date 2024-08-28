@@ -44,6 +44,14 @@ public class Designer {
     @Check(constraints = "email LIKE '%@%'")
     private String email;
 
+    @NotEmpty
+    @Column(columnDefinition = "varchar(30) not null")
+    private String city;
+
+    @NotEmpty
+    @Column(columnDefinition = "varchar(30) not null")
+    private String street;
+
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "designer")
     private Set<Rating> ratings;
 

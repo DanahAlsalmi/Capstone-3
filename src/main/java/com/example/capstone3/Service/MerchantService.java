@@ -37,6 +37,8 @@ public class MerchantService {
         m.setPhone(merchant.getPhone());
         m.setOwnerName(merchant.getOwnerName());
         m.setStoreName(m.getStoreName());
+        m.setCity(merchant.getCity());
+        m.setStreet(merchant.getStreet());
         merchantRepository.save(m);
     }
 

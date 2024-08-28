@@ -18,16 +18,20 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @NotEmpty
     @Column(columnDefinition = "varchar(20) not null")
     private String city;
+
     @NotEmpty
     @Column(columnDefinition = "varchar(20) not null")
     private String street;
+
     @NotNull
     @PositiveOrZero
     @Column(columnDefinition = "int not null")
     private Integer buildingNumber;
+
     @OneToOne
     @MapsId
     @JsonIgnore

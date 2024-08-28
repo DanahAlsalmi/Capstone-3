@@ -1,8 +1,11 @@
 package com.example.capstone3.Controller;
 
+import com.example.capstone3.Api.ApiException;
 import com.example.capstone3.DTO.DesignerInfoDTO;
 import com.example.capstone3.Model.Designer;
 import com.example.capstone3.Model.Rating;
+import com.example.capstone3.Repository.DesignerRepository;
+import com.example.capstone3.Repository.RatingRepository;
 import com.example.capstone3.Service.DesignerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/designer")
@@ -18,12 +22,15 @@ public class DesignerController {
 
     private final DesignerService designerService;
 
+
+    //***** Done By Danah *****
     //Get
     @GetMapping("/get")
     public ResponseEntity getAllDesigners() {
         return ResponseEntity.status(200).body(designerService.getAllDesigners());
     }
 
+    //***** Done By Danah *****
     //Add
     @PostMapping("/add")
     public ResponseEntity addDesigner(@Valid @RequestBody Designer designer) {
@@ -31,6 +38,7 @@ public class DesignerController {
         return ResponseEntity.status(200).body("Designer added successfully");
     }
 
+    //***** Done By Danah *****
     //Update
     @PutMapping("/update/{id}")
     public ResponseEntity updateDesigner(@PathVariable Integer id, @Valid @RequestBody Designer designer) {
@@ -38,6 +46,7 @@ public class DesignerController {
         return ResponseEntity.status(200).body("Designer updated successfully");
     }
 
+    //***** Done By Danah *****
     //Delete
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteDesigner(@PathVariable Integer id) {
@@ -57,6 +66,12 @@ public class DesignerController {
         return ResponseEntity.status(200).body("Order rejected successfully");
     }
 
+    @GetMapping("/total/{designerId}")
+    public ResponseEntity getDesignerTotal(@PathVariable Integer designerId) {
+        return ResponseEntity.status(200).body(designerService.totalRevenue(designerId));
+    }
+
+    //***** Done By Danah *****
     //Average for Designer
     @GetMapping("/average-rating/{id}")
     public ResponseEntity getDesignerAverage(@PathVariable Integer id) {
@@ -64,6 +79,7 @@ public class DesignerController {
         return ResponseEntity.status(200).body("The average is : "+averageRating);
     }
 
+    //***** Done By Danah *****
     //List of Ratings
     @GetMapping("/designer-ratings/{designerId}")
     public ResponseEntity getRatingsForDesigner(@PathVariable Integer designerId) {
@@ -71,9 +87,20 @@ public class DesignerController {
         return ResponseEntity.status(200).body(ratings);
     }
 
+    //***** Done By Danah *****
+    //Order History
     @GetMapping("/order-history/{designerId}")
     public ResponseEntity getDesignerOrderHistory(@PathVariable Integer designerId) {
         List<DesignerInfoDTO> designerInfo = designerService.getDesignerOrderHistory(designerId);
         return ResponseEntity.status(200).body(designerInfo);
     }
+
+    //***** Done By Danah *****
+    //Top designer
+    @GetMapping("/top-designer")
+    public ResponseEntity getTopDesigner() {
+        String topDesigner = designerService.getTopDesignerName();
+        return ResponseEntity.status(200).body(topDesigner);
+    }
+
 }

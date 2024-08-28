@@ -1,8 +1,6 @@
 package com.example.capstone3.Controller;
 
-import com.example.capstone3.DTO.FabricInfoDTO;
 import com.example.capstone3.DTO.TailorInfoDTO;
-import com.example.capstone3.Model.Order;
 import com.example.capstone3.Model.Rating;
 import com.example.capstone3.Model.Tailor;
 import com.example.capstone3.Service.TailorService;
@@ -17,8 +15,10 @@ import java.util.List;
 @RequestMapping("/api/v1/tailor")
 @RequiredArgsConstructor
 public class TailorController {
+
     private final TailorService tailorService;
 
+    //***** Done CRUD By Danah *****
     //Get
     @GetMapping("/get")
     public ResponseEntity getAllTailors() {
@@ -58,6 +58,12 @@ public class TailorController {
         return ResponseEntity.status(200).body("Order accepted successfully");
     }
 
+    @GetMapping("/total/{tailorId}")
+    public ResponseEntity getTotalRevenue(@PathVariable Integer tailorId) {
+        return ResponseEntity.status(200).body(tailorService.totalRevenue(tailorId));
+    }
+
+    //***** Done CRUD By Danah *****
     //Average for Tailor
     @GetMapping("/average-rating/{id}")
     public ResponseEntity getTailorAverage(@PathVariable Integer id) {
@@ -65,17 +71,27 @@ public class TailorController {
         return ResponseEntity.status(200).body("The average is : "+averageRating);
     }
 
-//    //List of Ratings
+    //***** Done CRUD By Danah *****
+    //List of Ratings
     @GetMapping("/tailor-ratings/{tailorId}")
     public ResponseEntity getRatingsForTailor(@PathVariable Integer tailorId) {
         List<Rating> ratings = tailorService.getRatingsForTailor(tailorId);
         return ResponseEntity.status(200).body(ratings);
     }
 
+    //***** Done By Danah *****
     @GetMapping("/order-history/{tailorId}")
     public ResponseEntity getTailorOrderHistory(@PathVariable Integer tailorId) {
         List<TailorInfoDTO> tailorInfo = tailorService.getTailorOrderHistory(tailorId);
         return ResponseEntity.status(200).body(tailorInfo);
+    }
+
+    //***** Done By Danah *****
+    //Top designer
+    @GetMapping("/top-designer")
+    public ResponseEntity getTopTailor() {
+        String topTailor = tailorService.getTopTailorName();
+        return ResponseEntity.status(200).body(topTailor);
     }
 
 }

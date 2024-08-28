@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +24,8 @@ public class FabricService {
     private final FabricRepository fabricRepository;
     private final MerchantRepository merchantRepository;
     private final OrderRepository orderRepository;
+    private final OrderService orderService;
+
 
 
     public List<Fabric> getAllFabric() {
@@ -98,13 +102,28 @@ public class FabricService {
         merchantRepository.save(m);
     }
 
+    public String topSellColor(){
+        List<Order> orders = orderService.getAllOrders();
+        if (orders.isEmpty()) {
+            throw new ApiException("No orders found");
+        }
+        Map<String, Long> colorCountMap = orders.stream()
+                .collect(Collectors.groupingBy(order -> order.getFabric().getColor(), Collectors.counting()));
+
+        // Find the color with the maximum count
+        return colorCountMap.entrySet().stream()
+                .max(Map.Entry.comparingByValue())  // Find the color with the highest count
+                .map(Map.Entry::getKey)  // Get the color
+                .orElseThrow(() -> new ApiException("No fabrics found in orders"));
+    }
+    //**** Done by danah ****
     public List<FabricInfoDTO> getFabricOrderHistory(Integer fabricId) {
         Fabric fabric = fabricRepository.findFabricById(fabricId);
         if(fabric == null) {
             throw new ApiException("Fabric with id " + fabricId + " not found");
         }
 
-        List<Order> orders = orderRepository.findOrderByFabricId(fabricId);
+        List<Order> orders = orderRepository.findOrderByFabric(fabric);
 
         List<FabricInfoDTO> fabricInfoList = new ArrayList<>();
         for (Order order : orders) {

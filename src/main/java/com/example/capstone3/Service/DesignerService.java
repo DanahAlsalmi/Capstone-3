@@ -96,13 +96,23 @@ public class DesignerService {
         orderRepository.save(o);
     }
 
+    public double totalRevenue(Integer designerId){
+        Designer designer = designerRepository.findDesignerById(designerId);
+        if (designer == null){
+            throw new ApiException("Designer not found");
+        }
+        List<Order> orders = orderRepository.findOrderByDesigner(designer);
+        double total = orders.size()*designer.getPrice();
+        return total;
+    }
+
     //***** Done by Danah *****
     public Double getAverageRatingForDesigner(Integer designerId) {
         Designer designer = designerRepository.findDesignerById(designerId);
         Set<Rating> ratings = designer.getRatings();
 
         if (ratings.isEmpty()) {
-            throw new ApiException("there are no ratings for merchant with id " + designerId);
+            throw new ApiException("there are no ratings for designer  with id " + designerId);
         }
 
         int totalRating = 0;
@@ -115,14 +125,24 @@ public class DesignerService {
 
     //***** Done by Danah *****
     //All Ratings
+//    public List<Rating> getRatingsForDesigner(Integer designerId) {
+//        Designer designer = designerRepository.findDesignerById(designerId);
+//        return ratingRepository.findRatingByDesigner(designer);
+//    }
     public List<Rating> getRatingsForDesigner(Integer designerId) {
         Designer designer = designerRepository.findDesignerById(designerId);
-        return ratingRepository.findRatingByDesigner(designer);
+
+        List<Rating> ratings = ratingRepository.findRatingByDesigner(designer);
+
+        ratings.sort((r1, r2) -> Double.compare(r2.getValue(), r1.getValue()));
+
+        return ratings;
     }
 
+
+    //***** Done by Danah *****
     public List<DesignerInfoDTO> getDesignerOrderHistory(Integer designerId) {
         Designer designer = designerRepository.findDesignerById(designerId);
-
         List<Order> orders = orderRepository.findOrderByDesigner(designer);
 
         List<DesignerInfoDTO> designerInfoList = new ArrayList<>();
@@ -136,6 +156,33 @@ public class DesignerService {
         }
 
         return designerInfoList;
+    }
+
+    public String getTopDesignerName() {
+        List<Designer> designers = designerRepository.findAll();
+
+        String topDesignerName = null;
+        double highestAverageRating = 0.0;
+
+        for (Designer designer : designers) {
+            List<Rating> ratings = ratingRepository.findRatingByDesigner(designer);
+
+            if (!ratings.isEmpty()) {
+                double sum = 0.0;
+                for (Rating rating : ratings) {
+                    sum += rating.getValue();
+                }
+
+                double averageRating = sum / ratings.size();
+
+                if (averageRating > highestAverageRating) {
+                    highestAverageRating = averageRating;
+                    topDesignerName = designer.getName();
+                }
+            }
+        }
+
+        return topDesignerName + " with average rating: " + highestAverageRating;
     }
 
 }

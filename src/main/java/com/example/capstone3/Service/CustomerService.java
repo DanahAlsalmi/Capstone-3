@@ -95,7 +95,7 @@ public class CustomerService {
             throw new ApiException("Fabric length is less than meters");
         }
         double total_price = fabric.getPrice() + (tailor.getPriceByMeter()*meter) + designer.getPrice()+10;
-        Order order = new Order(null,"Pending",total_price, LocalDateTime.now(),customer,null,designer,fabric,merchant,tailor);
+        Order order = new Order(null,"Pending",total_price, LocalDateTime.now(),meter,customer,null,designer,fabric,merchant,tailor);
         orderService.addOrder(order);
         ShippingDTO shipping = new ShippingDTO(order.getId() , null ,10 ,"initialled" );
         shippingService.addShipping(shipping);
@@ -105,9 +105,23 @@ public class CustomerService {
         }
         fabric.setLength(fabric.getLength()-meter);
         fabricRepository.save(fabric);
-
     }
 
+    public double totalSpend(Integer customerId){
+        Customer customer = customerRepository.findCustomerById(customerId);
+        if (customer == null) {
+            throw new ApiException("Customer not found");
+        }
+        List<Order> orders = getOrders(customerId);
+        double total = 0;
+        for (Order order : orders) {
+            total = total + order.getTotalPrice();
+        }
+        return total;
+    }
+
+
+    //***** Done By Danah *****
     public List<OrderHistoryDTO> getOrderHistory(Integer customerId) {
         List<Order> orders = orderRepository.findOrderByCustomId(customerId);
 

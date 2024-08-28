@@ -24,6 +24,7 @@ public class Shipping {
     @NotNull
     @Column(columnDefinition = "double not null")
     private double price;
+
     @NotEmpty
     @Pattern(regexp = "^(initialled|Shipped|Out for Delivery| Delivered )$")
     private String status;

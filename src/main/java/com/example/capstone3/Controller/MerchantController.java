@@ -75,6 +75,7 @@ public class MerchantController {
         return ResponseEntity.ok(merchant);
     }
 
+    //***** Done By Danah *****
     //Average for Merchant
     @GetMapping("/average-rating/{id}")
     public ResponseEntity getMerchantAverage(@PathVariable Integer id) {
@@ -82,6 +83,7 @@ public class MerchantController {
         return ResponseEntity.status(200).body("The average is : "+averageRating);
     }
 
+    //***** Done By Danah *****
     //List of Ratings
     @GetMapping("/merchant-ratings/{merchantId}")
     public ResponseEntity getRatingsForMerchant(@PathVariable Integer merchantId) {

@@ -1,10 +1,9 @@
 package com.example.capstone3.Repository;
 
-import com.example.capstone3.Model.Customer;
-import com.example.capstone3.Model.Designer;
-import com.example.capstone3.Model.Order;
-import com.example.capstone3.Model.Tailor;
+import com.example.capstone3.Model.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,7 +22,16 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     ///
     List<Order> findOrderByDesigner(Designer designer);
     ///
-    List<Order> findOrderByFabricId(Integer fabricId);
+    List<Order> findOrderByFabric(Fabric fabric);
+
+    @Query("SELECT o.fabric FROM Order o GROUP BY o.fabric.id ORDER BY COUNT(o.id) DESC")
+    List<Fabric> findBestSellingFabric(Pageable pageable);
+
+    List<Order> findOrderByOrderStatus(String orderStatus);
+
+    List<Order> findOrderByMerchant(Merchant merchant);
+
+
 
 
 }

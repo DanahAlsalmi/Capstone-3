@@ -1,7 +1,6 @@
 package com.example.capstone3.Service;
 
 import com.example.capstone3.Api.ApiException;
-import com.example.capstone3.DTO.FabricInfoDTO;
 import com.example.capstone3.DTO.TailorInfoDTO;
 import com.example.capstone3.Model.*;
 import com.example.capstone3.Repository.OrderRepository;
@@ -119,6 +118,8 @@ public class TailorService {
         return ratingRepository.findRatingByTailor(tailor);
     }
 
+    //***** Done by Danah *****
+    //History tailor
     public List<TailorInfoDTO> getTailorOrderHistory(Integer tailorId) {
         Tailor tailor = tailorRepository.findTailorById(tailorId);
         if (tailor == null) {
@@ -138,6 +139,46 @@ public class TailorService {
         }
 
         return tailorInfoList;
+    }
+
+    public double totalRevenue(Integer tailorId) {
+        Tailor tailor = tailorRepository.findTailorById(tailorId);
+        if (tailor == null) {
+            throw new ApiException("Tailor not found");
+        }
+        List<Order> orders = orderRepository.findOrderByTailor(tailor);
+        double total = 0;
+        for (Order order : orders){
+            total = total+(order.getLength()*tailor.getPriceByMeter());
+        }
+        return total;
+    }
+
+    public String getTopTailorName() {
+        List<Tailor> tailors = tailorRepository.findAll();
+
+        String topTailor = null;
+        double highestAverageRating = 0.0;
+
+        for (Tailor tailor : tailors) {
+            List<Rating> ratings = ratingRepository.findRatingByTailor(tailor);
+
+            if (!ratings.isEmpty()) {
+                double sum = 0.0;
+                for (Rating rating : ratings) {
+                    sum += rating.getValue();
+                }
+
+                double averageRating = sum / ratings.size();
+
+                if (averageRating > highestAverageRating) {
+                    highestAverageRating = averageRating;
+                    topTailor = tailor.getName();
+                }
+            }
+        }
+
+        return topTailor + " with average rating: " + highestAverageRating;
     }
 
 

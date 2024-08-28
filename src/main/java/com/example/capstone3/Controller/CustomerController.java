@@ -51,6 +51,7 @@ public class CustomerController {
         return ResponseEntity.status(200).body(new ApiResponse("Order made successfully"));
     }
 
+    //***** Done By Danah *****
     @GetMapping("/orders/history/{customerId}")
     public ResponseEntity getOrderHistory(@PathVariable Integer customerId) {
         List<OrderHistoryDTO> orderHistory = customerService.getOrderHistory(customerId);

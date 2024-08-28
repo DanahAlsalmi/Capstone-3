@@ -35,11 +35,13 @@ public class Merchant {
     @Pattern(regexp = "^05[0-9]{8}$", message = "Phone number must be 10 digits and start with 05")
     private String phone;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    private Address address;
+    @NotEmpty
+    @Column(columnDefinition = "varchar(30) not null")
+    private String city;
+    @NotEmpty
+    @Column(columnDefinition = "varchar(30) not null")
+    private String street;
 
-//    @OnetoMany(mappedBy = "merchant")
-//    private List<Rating> ratings;
 
     @OneToMany(mappedBy = "merchant")
     private List<Fabric> fabrics;

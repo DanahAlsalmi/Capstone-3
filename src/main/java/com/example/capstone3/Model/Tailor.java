@@ -45,6 +45,13 @@ public class Tailor {
     @Column(columnDefinition = "boolean not null default false")
     private boolean acceptOrder;
 
+    @NotEmpty
+    @Column(columnDefinition = "varchar(30) not null")
+    private String city;
+    @NotEmpty
+    @Column(columnDefinition = "varchar(30) not null")
+    private String street;
+
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "tailor")
     private Set<Rating> ratings;

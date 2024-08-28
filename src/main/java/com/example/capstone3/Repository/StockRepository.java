@@ -27,5 +27,4 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
     Stock findStockByMerchantId(Integer id);
 
     List<Stock> findByQuantityGreaterThanEqual(Integer quantity);
-
 }
