@@ -9,7 +9,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class AddressDTO {
-    @NotEmpty
+    //
+    @NotNull
     private Integer customerId;
 
     @NotEmpty

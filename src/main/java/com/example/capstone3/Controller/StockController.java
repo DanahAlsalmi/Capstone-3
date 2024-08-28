@@ -1,5 +1,6 @@
 package com.example.capstone3.Controller;
 
+import com.example.capstone3.DTO.StockDTO;
 import com.example.capstone3.Model.Stock;
 import com.example.capstone3.Service.StockService;
 import jakarta.validation.Valid;
@@ -20,8 +21,8 @@ public class StockController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity addStock(@RequestBody @Valid Stock stock) {
-        stockService.addStock(stock);
+    public ResponseEntity addStock(@RequestBody @Valid StockDTO stockDTO) {
+        stockService.addStock(stockDTO);
         return ResponseEntity.status(200).body("Stock added");
     }
 
@@ -35,5 +36,25 @@ public class StockController {
     public ResponseEntity deleteStock(@PathVariable Integer id) {
         stockService.deleteStock(id);
         return ResponseEntity.status(200).body("Stock deleted");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Stock> getStockById(@PathVariable Integer id) {
+        return ResponseEntity.ok(stockService.getStockById(id));
+    }
+
+    @GetMapping("/fabric/{fabricId}")
+    public ResponseEntity getStockByFabricId(@PathVariable Integer fabricId) {
+        return ResponseEntity.ok(stockService.getStockByFabricId(fabricId));
+    }
+
+    @GetMapping("/merchant/{merchantId}")
+    public ResponseEntity getStockByMerchantId(@PathVariable Integer merchantId) {
+        return ResponseEntity.ok(stockService.getStockByMerchantId(merchantId));
+    }
+
+    @GetMapping("/quantity/{quantity}")
+    public ResponseEntity getStockByQuantity(@PathVariable int quantity) {
+        return ResponseEntity.ok(stockService.getStockByQuantity(quantity));
     }
 }

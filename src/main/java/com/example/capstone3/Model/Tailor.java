@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -47,5 +48,9 @@ public class Tailor {
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "tailor")
     private Set<Rating> ratings;
+
+    @OneToMany(mappedBy = "tailor")
+    private List<Order> orders;
+
 }
 

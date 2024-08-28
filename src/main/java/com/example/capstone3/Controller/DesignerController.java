@@ -1,5 +1,6 @@
 package com.example.capstone3.Controller;
 
+import com.example.capstone3.DTO.DesignerInfoDTO;
 import com.example.capstone3.Model.Designer;
 import com.example.capstone3.Model.Rating;
 import com.example.capstone3.Service.DesignerService;
@@ -44,6 +45,18 @@ public class DesignerController {
         return ResponseEntity.status(200).body("Designer deleted successfully");
     }
 
+    @PutMapping("/accept/{orderId}/{designerId}")
+    public ResponseEntity acceptOrder(@PathVariable Integer orderId, @PathVariable Integer designerId) {
+        designerService.acceptOrder(orderId, designerId);
+        return ResponseEntity.status(200).body("Order accepted successfully");
+    }
+
+    @PutMapping("/reject/{orderId}/{designerId}")
+    public ResponseEntity rejectOrder(@PathVariable Integer orderId, @PathVariable Integer designerId) {
+        designerService.rejectOrder(orderId, designerId);
+        return ResponseEntity.status(200).body("Order rejected successfully");
+    }
+
     //Average for Designer
     @GetMapping("/average-rating/{id}")
     public ResponseEntity getDesignerAverage(@PathVariable Integer id) {
@@ -56,5 +69,11 @@ public class DesignerController {
     public ResponseEntity getRatingsForDesigner(@PathVariable Integer designerId) {
         List<Rating> ratings = designerService.getRatingsForDesigner(designerId);
         return ResponseEntity.status(200).body(ratings);
+    }
+
+    @GetMapping("/order-history/{designerId}")
+    public ResponseEntity getDesignerOrderHistory(@PathVariable Integer designerId) {
+        List<DesignerInfoDTO> designerInfo = designerService.getDesignerOrderHistory(designerId);
+        return ResponseEntity.status(200).body(designerInfo);
     }
 }

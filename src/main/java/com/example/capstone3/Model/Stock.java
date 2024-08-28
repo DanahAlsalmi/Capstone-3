@@ -1,5 +1,6 @@
 package com.example.capstone3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -23,11 +24,13 @@ public class Stock {
     @NotNull
     @OneToOne
     @JoinColumn(name = "fabric_id")
+    @JsonIgnore//
     private Fabric fabric;
 
     @NotNull
     @ManyToOne
     @JoinColumn(name = "merchant_id")
+    @JsonIgnore//
     private Merchant merchant;
 
     @Positive

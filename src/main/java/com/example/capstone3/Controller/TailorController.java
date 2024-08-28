@@ -1,5 +1,8 @@
 package com.example.capstone3.Controller;
 
+import com.example.capstone3.DTO.FabricInfoDTO;
+import com.example.capstone3.DTO.TailorInfoDTO;
+import com.example.capstone3.Model.Order;
 import com.example.capstone3.Model.Rating;
 import com.example.capstone3.Model.Tailor;
 import com.example.capstone3.Service.TailorService;
@@ -43,6 +46,17 @@ public class TailorController {
         return ResponseEntity.status(200).body("Tailor successfully deleted");
     }
 
+    @PutMapping("/accept/{orderId}/{tailorId}")
+    public ResponseEntity acceptOrder(@PathVariable Integer orderId, @PathVariable Integer tailorId) {
+        tailorService.acceptOrder(orderId, tailorId);
+        return ResponseEntity.status(200).body("Order accepted successfully");
+    }
+
+    @PutMapping("/reject/{orderId}/{tailorId}")
+    public ResponseEntity rejectOrder(@PathVariable Integer orderId, @PathVariable Integer tailorId) {
+        tailorService.rejectOrder(orderId, tailorId);
+        return ResponseEntity.status(200).body("Order accepted successfully");
+    }
 
     //Average for Tailor
     @GetMapping("/average-rating/{id}")
@@ -57,4 +71,11 @@ public class TailorController {
         List<Rating> ratings = tailorService.getRatingsForTailor(tailorId);
         return ResponseEntity.status(200).body(ratings);
     }
+
+    @GetMapping("/order-history/{tailorId}")
+    public ResponseEntity getTailorOrderHistory(@PathVariable Integer tailorId) {
+        List<TailorInfoDTO> tailorInfo = tailorService.getTailorOrderHistory(tailorId);
+        return ResponseEntity.status(200).body(tailorInfo);
+    }
+
 }

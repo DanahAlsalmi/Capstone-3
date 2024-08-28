@@ -19,15 +19,16 @@ public class Shipping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotEmpty
-    @Column(columnDefinition = "varchar(25) not null")
+    @Column(columnDefinition = "varchar(25) ")
     private String shipperName;
     @NotNull
     @Column(columnDefinition = "double not null")
     private double price;
     @NotEmpty
-    @Pattern(regexp = "^(Shipped|Out for Delivery| Delivered )$")
+    @Pattern(regexp = "^(initialled|Shipped|Out for Delivery| Delivered )$")
     private String status;
+
+
     @OneToOne
     @MapsId
     @JsonIgnore

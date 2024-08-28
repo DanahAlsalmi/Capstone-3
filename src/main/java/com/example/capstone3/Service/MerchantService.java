@@ -2,8 +2,10 @@ package com.example.capstone3.Service;
 
 import com.example.capstone3.Api.ApiException;
 import com.example.capstone3.Model.Merchant;
+import com.example.capstone3.Model.Order;
 import com.example.capstone3.Model.Rating;
 import com.example.capstone3.Repository.MerchantRepository;
+import com.example.capstone3.Repository.OrderRepository;
 import com.example.capstone3.Repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,7 @@ import java.util.List;
 public class MerchantService {
 
     private final MerchantRepository merchantRepository;
-
+    private final OrderRepository orderRepository;
     private final RatingRepository ratingRepository;
 
     public List<Merchant> getMerchant() {
@@ -46,6 +48,57 @@ public class MerchantService {
         merchantRepository.delete(m);
     }
 
+    public void acceptOrder(Integer orderId,Integer merchantId) {
+        Order o = orderRepository.findOrderById(orderId);
+        if (o==null){
+            throw new ApiException("Order not found");
+        }
+        Merchant merchant = merchantRepository.findMerchantById(merchantId);
+        if(merchant==null) {
+            throw new ApiException("Merchant not found");
+        }
+        if (!o.getMerchant().getId().equals(merchantId)){
+            throw new ApiException("Merchant with id '" + merchantId + "' does not belong to this order");
+        }
+        if (!o.getOrderStatus().equals("Pending")){
+            throw new ApiException("Order status is not Pending");
+        }
+        o.setOrderStatus("Processing in Merchant");
+        orderRepository.save(o);
+    }
+
+    public void rejectOrder(Integer orderId,Integer merchantId) {
+        Order o = orderRepository.findOrderById(orderId);
+        if (o==null){
+            throw new ApiException("Order not found");
+        }
+        Merchant merchant = merchantRepository.findMerchantById(merchantId);
+        if(merchant==null) {
+            throw new ApiException("Merchant not found");
+        }
+        if (!o.getMerchant().getId().equals(merchantId)){
+            throw new ApiException("Merchant with id '" + merchantId + "' does not belong to this order");
+        }
+        if (!o.getOrderStatus().equals("Pending")){
+            throw new ApiException("Order status is not Pending");
+        }
+        o.setOrderStatus("Reject By Merchant");
+        orderRepository.save(o);
+    }
+
+    public Merchant getMerchantByOwnerName(String ownerName) {
+        return merchantRepository.findByOwnerName(ownerName);
+    }
+
+    public Merchant getMerchantByEmail(String email) {
+        return merchantRepository.findByEmail(email);
+    }
+
+    public Merchant getMerchantByPhone(String phone) {
+        return merchantRepository.findByPhone(phone);
+    }
+
+    //*****  Done by Danah *****
     //Average Rating
     public Double getAverageRatingForMerchant(Integer merchantId) {
         Merchant merchant = merchantRepository.findMerchantById(merchantId);
@@ -63,6 +116,7 @@ public class MerchantService {
         return (double) totalRating / ratings.size();
     }
 
+    //***** Done by Danah *****
     //All Ratings
     public List<Rating> getRatingsForMerchant(Integer merchantId) {
         Merchant merchant = merchantRepository.findMerchantById(merchantId);

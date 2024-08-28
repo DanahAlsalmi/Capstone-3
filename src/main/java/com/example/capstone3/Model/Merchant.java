@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 
 import java.util.List;
 
@@ -39,12 +38,20 @@ public class Merchant {
 //    @OneToOne(cascade = CascadeType.ALL)
 //    private Address address;
 
-    @OneToMany(mappedBy = "merchant")
-    private List<Rating> ratings;
+//    @OnetoMany(mappedBy = "merchant")
+//    private List<Rating> ratings;
 
     @OneToMany(mappedBy = "merchant")
     private List<Fabric> fabrics;
 
     @OneToMany(mappedBy = "merchant")
     private List<Stock> stocks;
+
+    @OneToMany(mappedBy = "merchant")
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "merchant")
+    private List<Rating> ratings;
+
+
 }

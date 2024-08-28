@@ -1,5 +1,6 @@
 package com.example.capstone3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
@@ -7,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,6 +37,8 @@ public class Fabric {
     @NotEmpty
     private String description;
 
+    private double length;
+
     @Positive
     private double price;
 
@@ -42,6 +47,10 @@ public class Fabric {
 
     @ManyToOne
     @JoinColumn(name = "merchant_id", nullable = false)
+    @JsonIgnore
     private Merchant merchant;
+
+    @OneToMany(mappedBy = "fabric")
+    private List<Order> orders;
 
 }

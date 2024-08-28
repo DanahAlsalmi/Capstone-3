@@ -26,6 +26,7 @@ public class RatingService {
 
     private final DesignerRepository designerRepository;
 
+    //*****  Done by Danah *****
 
     //Get Ratings
     public List<Rating> getAllRatings() {

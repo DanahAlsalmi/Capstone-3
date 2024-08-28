@@ -13,15 +13,15 @@ import java.util.List;
 public class OrderService {
     private final OrderRepository orderRepository;
 
-    private List<Order> getAllOrders() {
+    public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
 
-    private void addOrder(Order order) {
+    public void addOrder(Order order) {
         orderRepository.save(order);
     }
 
-    private void deleteOrder(Integer id) {
+    public void deleteOrder(Integer id) {
         Order order = orderRepository.findOrderById(id);
         if (order == null) {
             throw new ApiException("Order not found");

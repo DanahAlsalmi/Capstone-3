@@ -1,12 +1,15 @@
 package com.example.capstone3.Controller;
 
 import com.example.capstone3.Api.ApiResponse;
+import com.example.capstone3.DTO.OrderHistoryDTO;
 import com.example.capstone3.Model.Customer;
 import com.example.capstone3.Service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,5 +38,22 @@ public class CustomerController {
     public ResponseEntity deleteCustomer(@PathVariable Integer customerId) {
         customerService.deleteCustomer(customerId);
         return ResponseEntity.status(200).body(new ApiResponse("Customer deleted successfully"));
+    }
+
+    @GetMapping("/orders/{customerId}")
+    public ResponseEntity getAllOrders(@PathVariable Integer customerId) {
+        return ResponseEntity.status(200).body(customerService.getOrders(customerId));
+    }
+
+    @PutMapping("/buy/{customerId}/{fabricId}/{MerchantId}/{tailorId}/{designerId}/{meter}")
+    public ResponseEntity buy(@PathVariable Integer customerId, @PathVariable Integer fabricId ,@PathVariable Integer MerchantId ,@PathVariable Integer tailorId ,@PathVariable Integer designerId ,@PathVariable double meter){
+        customerService.makeOrder(customerId,fabricId,MerchantId,tailorId,designerId,meter);
+        return ResponseEntity.status(200).body(new ApiResponse("Order made successfully"));
+    }
+
+    @GetMapping("/orders/history/{customerId}")
+    public ResponseEntity getOrderHistory(@PathVariable Integer customerId) {
+        List<OrderHistoryDTO> orderHistory = customerService.getOrderHistory(customerId);
+        return ResponseEntity.status(200).body(orderHistory);
     }
 }

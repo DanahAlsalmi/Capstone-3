@@ -46,4 +46,7 @@ public class Designer {
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "designer")
     private Set<Rating> ratings;
+
+    @OneToMany(mappedBy = "designer")
+    private List<Order> orders;
 }
