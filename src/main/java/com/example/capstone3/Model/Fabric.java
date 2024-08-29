@@ -38,6 +38,7 @@ public class Fabric {
     private String description;
 
     private double length;
+    private double size;
 
     @Positive
     private double price;

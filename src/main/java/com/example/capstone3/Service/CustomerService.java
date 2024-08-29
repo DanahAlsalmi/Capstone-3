@@ -90,18 +90,17 @@ public class CustomerService {
         if (stock.getQuantity() == 0){
             throw new ApiException("Fabric stock is zero");
         }
-        double total_meters = stock.getQuantity() * fabric.getLength();
+        double total_meters = stock.getQuantity() * fabric.getSize();
         if (total_meters < meter){
             throw new ApiException("Fabric length is less than meters");
         }
-        double total_price = fabric.getPrice() + (tailor.getPriceByMeter()*meter) + designer.getPrice()+10;
+        double total_price = (fabric.getPrice()*meter) + (tailor.getPriceByMeter()*meter) + designer.getPrice();
         Order order = new Order(null,"Pending",total_price, LocalDateTime.now(),meter,customer,null,designer,fabric,merchant,tailor);
         orderService.addOrder(order);
         ShippingDTO shipping = new ShippingDTO(order.getId() , null ,10 ,"initialled" );
         shippingService.addShipping(shipping);
-        if (fabric.getLength()-meter == 0){
-            stock.setQuantity(stock.getQuantity()-1);
-            stockRepository.save(stock);
+        if (fabric.getLength()-meter < 0){
+            throw new ApiException("Fabric Length is not enough");
         }
         fabric.setLength(fabric.getLength()-meter);
         fabricRepository.save(fabric);

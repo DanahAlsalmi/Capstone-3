@@ -70,9 +70,9 @@ public class TailorService {
             throw new ApiException("Tailor with id '" + tailorId + "' does not belong to this order");
         }
         if (!o.getOrderStatus().equals("Processing in Designer")){
-            throw new ApiException("Order status is not Pending");
+            throw new ApiException("Order status is not Processing in Designer");
         }
-        o.setOrderStatus("Processing in Tailor");
+        o.setOrderStatus("Confirmed");
         orderRepository.save(o);
     }
 

@@ -44,23 +44,23 @@ public class RatingController {
 
 
     // Endpoint to rate a merchant
-    @PostMapping("/merchant/{merchantId}/rate")
-    public ResponseEntity rateMerchants(@PathVariable Integer merchantId,@Valid @RequestBody Rating rating) {
-        ratingService.rateMerchant(merchantId, rating);
+    @PostMapping("/merchant/{merchantId}/rate/{customerId}")
+    public ResponseEntity rateMerchants(@PathVariable Integer merchantId,@PathVariable Integer customerId,@Valid @RequestBody Rating rating) {
+        ratingService.rateMerchant(merchantId,customerId, rating);
         return ResponseEntity.status(200).body("Rating Added successfully");
     }
 
     // Endpoint to rate a tailor
-    @PostMapping("/tailor/{tailorId}/rate")
-    public ResponseEntity rateTailors(@PathVariable Integer tailorId,@Valid @RequestBody Rating rating) {
-        ratingService.rateTailor(tailorId, rating);
+    @PostMapping("/tailor/{tailorId}/rate/{customerId}")
+    public ResponseEntity rateTailors(@PathVariable Integer tailorId,@PathVariable Integer customerId,@Valid @RequestBody Rating rating) {
+        ratingService.rateTailor(tailorId,customerId, rating);
         return ResponseEntity.status(200).body("Rating Added successfully");
     }
 
     // Endpoint to rate a Designer
-    @PostMapping("/designer/{designerId}/rate")
-    public ResponseEntity rateDesigners(@PathVariable Integer designerId,@Valid @RequestBody Rating rating) {
-        ratingService.rateDesigner(designerId, rating);
+    @PostMapping("/designer/{designerId}/rate/{customerId}")
+    public ResponseEntity rateDesigners(@PathVariable Integer designerId,@PathVariable Integer customerId,@Valid @RequestBody Rating rating) {
+        ratingService.rateDesigner(designerId,customerId, rating);
         return ResponseEntity.status(200).body("Rating Added successfully");
     }
 }

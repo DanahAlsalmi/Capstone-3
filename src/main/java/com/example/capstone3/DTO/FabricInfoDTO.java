@@ -6,6 +6,8 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class FabricInfoDTO {
+
+
     private Integer orderId;
     private Integer merchantId;
     private String orderStatus;

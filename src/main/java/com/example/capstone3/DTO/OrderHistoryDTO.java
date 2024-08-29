@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderHistoryDTO {
+
     private Integer orderId;
     private String orderStatus;
     private double totalPrice;

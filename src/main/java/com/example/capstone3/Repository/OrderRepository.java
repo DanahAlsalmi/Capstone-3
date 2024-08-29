@@ -1,6 +1,7 @@
 package com.example.capstone3.Repository;
 
 import com.example.capstone3.Model.*;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,6 +31,14 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findOrderByOrderStatus(String orderStatus);
 
     List<Order> findOrderByMerchant(Merchant merchant);
+
+    Order findOrderByMerchantAndCustom(Merchant merchant, Customer customer);
+
+    Order findOrderByTailorAndCustom(Tailor tailor, Customer customer);
+
+    Order findOrderByDesignerAndCustom(Designer designer, Customer customer);
+
+
 
 
 

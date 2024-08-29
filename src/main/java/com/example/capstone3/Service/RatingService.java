@@ -1,14 +1,8 @@
 package com.example.capstone3.Service;
 
 import com.example.capstone3.Api.ApiException;
-import com.example.capstone3.Model.Designer;
-import com.example.capstone3.Model.Merchant;
-import com.example.capstone3.Model.Rating;
-import com.example.capstone3.Model.Tailor;
-import com.example.capstone3.Repository.DesignerRepository;
-import com.example.capstone3.Repository.MerchantRepository;
-import com.example.capstone3.Repository.RatingRepository;
-import com.example.capstone3.Repository.TailorRepository;
+import com.example.capstone3.Model.*;
+import com.example.capstone3.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +16,8 @@ public class RatingService {
     private final MerchantRepository merchantRepository;
     private final TailorRepository tailorRepository;
     private final DesignerRepository designerRepository;
+    private final CustomerRepository customerRepository;
+    private final OrderRepository orderRepository;
 
     //*****  Done by Danah *****
 
@@ -56,10 +52,18 @@ public class RatingService {
     }
 
     // Save a new rating for a merchant
-    public Rating rateMerchant(Integer merchantId,Rating rating) {
+    public Rating rateMerchant(Integer merchantId,Integer customerId,Rating rating) {
         Merchant merchant = merchantRepository.findMerchantById(merchantId);
         if(merchant == null) {
             throw new ApiException("Merchant with id '" + merchantId + "' not found");
+        }
+        Customer customer = customerRepository.findCustomerById(customerId);
+        if(customer == null) {
+            throw new ApiException("Customer with id '" + customerId + "' not found");
+        }
+        Order order = orderRepository.findOrderByMerchantAndCustom(merchant,customer);
+        if(order == null) {
+            throw new ApiException("Customer must make order with merchant to rate");
         }
         Rating r = new Rating();
         r.setMerchant(merchant);
@@ -74,10 +78,18 @@ public class RatingService {
     }
 
     // Save a new rating for a Tailor
-    public Rating rateTailor(Integer tailorId,Rating rating) {
+    public Rating rateTailor(Integer tailorId,Integer customerId,Rating rating) {
         Tailor tailor = tailorRepository.findTailorById(tailorId);
         if(tailor == null) {
             throw new ApiException("Tailor with id '" + tailorId + "' not found");
+        }
+        Customer customer = customerRepository.findCustomerById(customerId);
+        if(customer == null) {
+            throw new ApiException("Customer with id '" + customerId + "' not found");
+        }
+        Order order = orderRepository.findOrderByTailorAndCustom(tailor,customer);
+        if(order == null) {
+            throw new ApiException("Customer must make order with tailor to rate");
         }
         Rating r = new Rating();
         r.setTailor(tailor);
@@ -92,11 +104,20 @@ public class RatingService {
     }
 
     // Save a new rating for a Tailor
-    public Rating rateDesigner(Integer designerId,Rating rating) {
+    public Rating rateDesigner(Integer designerId,Integer customerId,Rating rating) {
         Designer designer = designerRepository.findDesignerById(designerId);
         if(designer == null) {
             throw new ApiException("Designer with id '" + designerId + "' not found");
         }
+        Customer customer = customerRepository.findCustomerById(customerId);
+        if(customer == null) {
+            throw new ApiException("Customer with id '" + customerId + "' not found");
+        }
+        Order order = orderRepository.findOrderByDesignerAndCustom(designer,customer);
+        if(order == null) {
+            throw new ApiException("Customer must make order with designer to rate");
+        }
+
         Rating r = new Rating();
         r.setDesigner(designer);
         if(rating.getValue()>5){
